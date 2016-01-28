@@ -52,14 +52,14 @@
 <script src="speechDetector.js">
 </script>
 <script>
+
+  var words = ["eat", "Ed", "add"];
   if (window.location.hash.length > 3) {
     words = window.location.hash.slice(1).split(",");
   }
 
-  var words = ["eat", "Ed", "add"];
-
   var INTERTRIAL_DUR_MS = 500;
-  var TRIALS_PER_BLOCK = 30;
+  var TRIALS_PER_BLOCK = 9;
   var PAGE_LOAD_TIME = new Date().getTime();
 
   var state = {};
@@ -182,7 +182,8 @@
   }
 
   function handleKeydown(e) {
-    if (e.code == "Space") {
+    // since onkeydown, use Unicode key code (not character code)
+    if (e.keyCode == 32) { // space bar
       e.preventDefault();
       if (state.isBreak) {
         updateState({
@@ -197,16 +198,14 @@
           isPaused: !state.isPaused
         })
       }
-    } else if (e.code == "ArrowRight") {
+    } else if (e.keyCode == 39) { // right arrow
       e.preventDefault();
-      updateState({
-        isBreak: false
-      })
+      if (state.isBreak) return;
       endTrial({
         source: "keyboard"
       })
       return false;
-    } else if (e.code == "KeyL") {
+    } else if (e.keyCode == 76) { // L
       displayLog();
     }
   }
